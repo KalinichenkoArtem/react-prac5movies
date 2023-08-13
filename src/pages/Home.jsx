@@ -1,23 +1,21 @@
-import { Link } from 'react-router-dom';
-import { Title, List } from './Home.styled';
+import { useState, useEffect } from 'react';
+import { getTrendMovies } from '../movieAPI';
+import MoviesList from '../components/MoviesList';
 
-export const Home = ({ movies }) => {
+import { Title } from './Home.styled';
+
+export const Home = () => {
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    getTrendMovies().then(({ results }) => {
+      setMovies([...results]);
+    });
+  }, []);
+
   return (
     <main>
       <Title>Trending today</Title>
-      <List>
-        {['movie-1, movie-2, movie-3'].map(movie => (
-          <li>
-            <Link
-              style={{ textDecoration: 'none' }}
-              key={movie}
-              to={`${movie}`}
-            >
-              {movie}
-            </Link>
-          </li>
-        ))}
-      </List>
+      <MoviesList movies={movies} />
     </main>
   );
 };
